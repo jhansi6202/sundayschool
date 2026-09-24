@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Sunday School Bible Verses</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #fff4d6;
+            text-align: center;
+            padding: 30px;
+        }
+
+        h1 {
+            color: #ff6b6b;
+        }
+
+        /* Back Home Button - Right Side */
+        .home-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+
+            padding: 12px 20px;
+            border-radius: 20px;
+
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .home-button:hover {
+            background-color: #ff4f4f;
+        }
+
+        .verse {
+            background-color: white;
+            width: 400px;
+            max-width: 90%;
+            margin: 25px auto;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px #ccc;
+        }
+
+        .verse h2 {
+            color: #ff8a65;
+        }
+
+        .verse p {
+            font-size: 20px;
+            line-height: 1.6;
+        }
+
+        .verse h3 {
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Back to Home -->
+    <button class="home-button" onclick="window.location.href='index.html'">
+        🏠 Back to Home
+    </button>
+
+
+    <h1>📖 Sunday School Bible Verses</h1>
+
+
+    <div id="verseContainer">
+        Loading verses...
+    </div>
+
+
+    <script>
+
+        fetch("http://localhost:5000/api/verses")
+
+            .then(response => response.json())
+
+            .then(data => {
+
+                let html = "";
+
+                data.forEach(verse => {
+
+                    html += `
+                        <div class="verse">
+
+                            <h2>🌟 Bible Verse</h2>
+
+                            <p>
+                                "${verse.verse}"
+                            </p>
+
+                            <h3>
+                                ${verse.reference}
+                            </h3>
+
+                        </div>
+                    `;
+
+                });
+
+                document.getElementById("verseContainer").innerHTML = html;
+
+            })
+
+            .catch(error => {
+
+                document.getElementById("verseContainer").innerHTML =
+                    "❌ Cannot connect to backend.";
+
+                console.log(error);
+
+            });
+
+    </script>
+
+</body>
+
+</html>

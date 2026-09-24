@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Sunday School Songs</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff4d6;
+            text-align: center;
+            padding: 30px;
+        }
+
+        h1 {
+            color: #ff6b6b;
+        }
+
+        .song {
+            background-color: white;
+            width: 350px;
+            max-width: 90%;
+            margin: 30px auto;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px #ccc;
+        }
+
+        .song h2 {
+            color: #ff8a65;
+        }
+
+        button {
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            margin: 5px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        #lyrics {
+            display: none;
+            background-color: white;
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px #ccc;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>🎵 Sunday School Songs 🎵</h1>
+
+    <!-- Song will appear here -->
+    <div id="songContainer"></div>
+
+    <div id="lyrics"></div>
+
+    <br>
+
+    <button onclick="goHome()">
+        🏠 Back to Home
+    </button>
+
+
+    <script>
+
+        let currentSong = null;
+
+
+        // Get songs from backend
+        fetch("http://localhost:5000/api/songs")
+
+            .then(response => response.json())
+
+            .then(data => {
+
+                currentSong = data[0];
+
+                document.getElementById("songContainer").innerHTML = `
+
+                    <div class="song">
+
+                        <h2>🎵 ${currentSong.title}</h2>
+
+                        <p>English & Telugu Song</p>
+
+                        <button onclick="showLyrics()">
+                            📖 View Lyrics
+                        </button>
+
+                        <button onclick="openYouTube()">
+                            ▶️ YouTube
+                        </button>
+
+                    </div>
+
+                `;
+
+            })
+
+            .catch(error => {
+
+                document.getElementById("songContainer").innerHTML =
+                    "<p>❌ Cannot connect to backend.</p>";
+
+                console.log(error);
+
+            });
+
+
+        function showLyrics() {
+
+            document.getElementById("lyrics").style.display = "block";
+
+            document.getElementById("lyrics").innerHTML = `
+
+                <h3>🇬🇧 English</h3>
+
+                <p>
+                    ${currentSong.english.replace(/\n/g, "<br>")}
+                </p>
+
+                <h3>🇮🇳 Telugu</h3>
+
+                <p>
+                    ${currentSong.telugu.replace(/\n/g, "<br>")}
+                </p>
+
+            `;
+
+        }
+
+
+        function openYouTube() {
+
+            window.open(
+                currentSong.youtube,
+                "_blank"
+            );
+
+        }
+
+
+        function goHome() {
+
+            window.location.href = "index.html";
+
+        }
+
+    </script>
+
+</body>
+
+</html>
